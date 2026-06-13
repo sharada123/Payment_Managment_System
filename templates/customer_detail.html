@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>{{ customer.name }}</h2>
+
+<p>Total Fees : ₹ {{ customer.total_fees }}</p>
+<p>Received : ₹ {{ customer.received_payment }}</p>
+<p>Remaining : ₹ {{ customer.remaining_payment }}</p>
+
+<hr>
+
+<h4>Payment History</h4>
+
+<table class="table table-bordered">
+
+<tr>
+    <th>Date</th>
+    <th>Amount</th>
+</tr>
+
+{% for payment in history %}
+
+<tr>
+    <td>{{ payment.payment_date|date:"d-m-Y" }}</td>
+    <td>₹ {{ payment.amount }}</td>
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="2">
+        No Payment History Found
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}
