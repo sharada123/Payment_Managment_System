@@ -12,6 +12,7 @@
           rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
@@ -40,15 +41,19 @@
             <ul class="navbar-nav ms-auto">
 
     {% if user.is_authenticated %}
-
+                <li class="nav-item">
+            <a class="nav-link active" href="{% url 'dashboard' %}">
+                Dashboard
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link active" href="/">
-                Dashboard
+                View Customers
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'add_customer' %}">
+            <a class="nav-link active" href="{% url 'add_customer' %}">
                 Add Customer
             </a>
         </li>
@@ -60,7 +65,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">
+            <a class="nav-link active text-warning" href="{% url 'logout' %}">
                 Logout
             </a>
         </li>

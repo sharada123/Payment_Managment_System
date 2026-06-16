@@ -8,14 +8,23 @@
 
 <div class="d-flex justify-content-between mb-3">
 
-    <form method="get">
+    <form method="get" class="d-flex">
 
-        <input type="text"
-       name="search"
-       class="form-control search-box"
-       placeholder="🔍 Search Customer">
-    </form>
+    <input type="text"
+           name="search"
+           value="{{ request.GET.search }}"
+           class="form-control search-box"
+           placeholder="🔍 Search Customer">
 
+   
+
+</form>
+<a href="{% url 'download_pdf' %}"
+   class="btn btn-danger fw-bold">
+
+   Download PDF
+
+</a>
     <a href="{% url 'add_customer' %}"
        class="btn btn-primary fw-bold">
        ADD CUSTOMER
@@ -28,27 +37,45 @@
 <thead>
 <tr>
     <th>Name</th>
+      <th>Mobile Number</th>
+    <th>Services</th>
     <th>Total Fees</th>
-    <th>Received</th>
-    <th>Remaining</th>
+    <th>Received Payment</th>
+    <th>Remaining Payment </th>
     <th>Action</th>
     <th>Payment History</th>
 </tr>
 </thead>
 
-<tbody>
+<tbody class="fw-bold">
 
 {% for c in customers %}
 
 <tr>
 
-<td>{{ c.name }}</td>
-<td>₹ {{ c.total_fees }}</td>
-<td>₹ {{ c.received_payment }}</td>
+<td>{{ c.name|upper }}</td>
+<td>{{ c.mobile }}</td>
+<td>
+    
+    {% for service in c.tasks.splitlines %}
+        <span class="badge bg-info me-1">
+            {{ service|upper }}
+        </span>
+    {% endfor %}
+
+  
+    <a href="{% url 'add_service' c.id %}"
+      >
+       <i class="fa-solid fa-pen-to-square"></i>
+    </a>
+
+</td>
+<td><span class="badge bg-warning">₹ {{ c.total_fees }}</span></td>
+<td><span class="badge bg-success">₹ {{ c.received_payment }}</span></td>
 
 <td>
     {% if c.remaining_payment > 0 %}
-        <span class="badge bg-warning">
+        <span class="badge bg-danger">
             ₹ {{ c.remaining_payment }}
         </span>
     {% else %}
@@ -61,14 +88,14 @@
 <td>
 
 <a href="{% url 'update_payment' c.id %}"
-   class="btn btn-success btn-sm">
-   Update
+   class="btn btn-primary btn-sm fw-bold">
+   Add Payment
 </a>
-
+<br>
 {% if c.remaining_payment <= 0 %}
 
 <a href="{% url 'delete_customer' c.id %}"
-   class="btn btn-danger btn-sm">
+   class="btn btn-danger btn-sm mt-2">
    Delete
 </a>
 

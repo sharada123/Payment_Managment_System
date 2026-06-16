@@ -2,6 +2,8 @@ from django.db import models
 
 class Customer(models.Model):
     name = models.CharField(max_length=100)
+    tasks = models.TextField(blank=True)
+    mobile = models.CharField(max_length=10,blank=True)
     total_fees = models.DecimalField(max_digits=10, decimal_places=2)
     received_payment = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 

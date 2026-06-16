@@ -2,17 +2,17 @@
 
 {% block content %}
 
-<h2>{{ customer.name }}</h2>
+<h2 class="fw-bold">{{ customer.name|upper }}</h2>
 
-<p>Total Fees : ₹ {{ customer.total_fees }}</p>
-<p>Received : ₹ {{ customer.received_payment }}</p>
-<p>Remaining : ₹ {{ customer.remaining_payment }}</p>
+<p class="fw-bold">Total Fees : ₹ {{ customer.total_fees }}</p>
+<p class="fw-bold">Received : ₹ {{ customer.received_payment }}</p>
+<p class="fw-bold">Remaining : ₹ {{ customer.remaining_payment }}</p>
 
 <hr>
 
-<h4>Payment History</h4>
+<h4 class="text-primary fw-bold">Payment History</h4>
 
-<table class="table table-bordered">
+<table class="table table-bordered fw-bold">
 
 <tr>
     <th>Date</th>
