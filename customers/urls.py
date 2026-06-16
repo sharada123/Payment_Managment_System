@@ -25,4 +25,20 @@ path(
     views.download_pdf,
     name='download_pdf'
 ),
+path(
+    'expense-report/',
+    views.expense_report_pdf,
+    name='expense_report_pdf'
+),
+path(
+    'expenses/',
+    views.expense_list,
+    name='expense_list'
+),
+
+path(
+    'expenses/add/',
+    views.add_expense,
+    name='add_expense'
+),
 ]

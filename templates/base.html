@@ -46,18 +46,117 @@
                 Dashboard
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="/">
+        <li class="nav-item dropdown">
+
+    <a class="nav-link dropdown-toggle fw-bold"
+       href="#"
+       role="button"
+       data-bs-toggle="dropdown">
+
+        <i class="fa-solid fa-users"></i>
+        Customers
+
+    </a>
+
+    <ul class="dropdown-menu expense-dropdown">
+
+        <li>
+            <a class="dropdown-item fw-bold"
+               href="{% url 'customer_list' %}">
+
+                <i class="fa-solid fa-list"></i>
                 View Customers
+
             </a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link active" href="{% url 'add_customer' %}">
+        <li>
+            <a class="dropdown-item fw-bold"
+               href="{% url 'add_customer' %}">
+
+                <i class="fa-solid fa-user-plus"></i>
                 Add Customer
+
             </a>
         </li>
 
+    </ul>
+
+</li>
+       <li class="nav-item dropdown">
+
+    <a class="nav-link dropdown-toggle fw-bold"
+       href="#"
+       role="button"
+       data-bs-toggle="dropdown">
+
+        <i class="fa-solid fa-wallet"></i>
+        Expenses
+
+    </a>
+
+    <ul class="dropdown-menu expense-dropdown">
+
+        <li>
+            <a class="dropdown-item fw-bold"
+               href="{% url 'add_expense' %}">
+
+                <i class="fa-solid fa-plus"></i>
+                Add Expense
+
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item fw-bold"
+               href="{% url 'expense_list' %}">
+
+                <i class="fa-solid fa-list"></i>
+                View Expenses
+
+            </a>
+        </li>
+
+    </ul>
+    <li class="nav-item  dropdown">
+
+    <a class="nav-link dropdown-toggle"
+       href="#"
+       data-bs-toggle="dropdown">
+
+        Reports
+
+    </a>
+
+    <ul class="dropdown-menu expense-dropdown">
+
+        <li>
+
+            <a class="dropdown-item fw-bold"
+               href="{% url 'download_pdf' %}">
+
+                Customer Report PDF
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="dropdown-item fw-bold"
+               href="{% url 'expense_report_pdf' %}">
+
+                Expense Report PDF
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</li>
+
+</li>
         <li class="nav-item">
             <span class="nav-link fw-bold text-warning">
                 Welcome {{ user.username }}

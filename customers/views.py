@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer,PaymentHistory
-from .forms import CustomerForm,AddServiceForm,RegisterForm
+from .models import Customer,PaymentHistory,Expense
+from .forms import CustomerForm,AddServiceForm,RegisterForm,ExpenseForm
 from decimal import Decimal
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -9,7 +9,7 @@ from django.db.models import Sum, F
 from django.http import HttpResponse
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import landscape, letter
+from reportlab.lib.pagesizes import landscape, letter,A4
 @login_required
 def customer_list(request):
 
@@ -52,19 +52,33 @@ def dashboard(request):
 
     total_pending_amount = total_fees - total_received
 
+    # Expense Cards
+    total_expense = Expense.objects.filter(
+        expense_type='expense'
+    ).aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
+
+    total_loan = Expense.objects.filter(
+        expense_type='loan'
+    ).aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
+
     context = {
         'total_customers': total_customers,
         'pending_customers': pending_customers,
         'total_received': total_received,
         'total_pending_amount': total_pending_amount,
+        'total_expense': total_expense,
+        'total_loan': total_loan,
     }
 
     return render(
         request,
         'dashboard.html',
         context
-    ) 
-
+    )
 @login_required
 def add_customer(request):
 
@@ -277,3 +291,94 @@ def download_pdf(request):
     pdf.build([table])
 
     return response
+
+
+@login_required
+def expense_report_pdf(request):
+
+    response = HttpResponse(
+        content_type='application/pdf'
+    )
+
+    response[
+        'Content-Disposition'
+    ] = 'attachment; filename="expense_report.pdf"'
+
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=landscape(A4)
+    )
+
+    data = [[
+        'NAME',
+        'TYPE',
+        'AMOUNT',
+        'DESCRIPTION',
+        'DATE'
+    ]]
+
+    expenses = Expense.objects.all()
+
+    for e in expenses:
+
+        data.append([
+            e.person_name.upper(),
+            e.expense_type.upper(),
+            str(e.amount),
+            e.description.upper(),
+            e.expense_date.strftime('%d-%m-%Y')
+        ])
+
+    table = Table(data)
+
+    table.setStyle(TableStyle([
+
+        ('BACKGROUND',(0,0),(-1,0),colors.darkgreen),
+        ('TEXTCOLOR',(0,0),(-1,0),colors.white),
+
+        ('GRID',(0,0),(-1,-1),1,colors.black),
+
+        ('FONTNAME',(0,0),(-1,0),'Helvetica-Bold'),
+
+        ('BACKGROUND',(0,1),(-1,-1),colors.lightgrey),
+
+    ]))
+
+    doc.build([table])
+
+    return response
+
+@login_required
+def expense_list(request):
+
+    expenses = Expense.objects.all().order_by(
+        '-expense_date'
+    )
+
+    return render(
+        request,
+        'expense_list.html',
+        {'expenses': expenses}
+    )
+
+
+@login_required
+def add_expense(request):
+
+    form = ExpenseForm(
+        request.POST or None
+    )
+
+    if form.is_valid():
+
+        form.save()
+
+        return redirect(
+            'expense_list'
+        )
+
+    return render(
+        request,
+        'expense_form.html',
+        {'form': form}
+    )

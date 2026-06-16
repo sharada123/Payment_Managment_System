@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer
+from .models import Customer,Expense
 from django.contrib.auth.models import User
 
 class CustomerForm(forms.ModelForm):
@@ -36,3 +36,28 @@ class AddServiceForm(forms.Form):
         decimal_places=2,
         label="Service Fee"
     )
+
+
+
+class ExpenseForm(forms.ModelForm):
+
+    class Meta:
+        model = Expense
+
+        fields = [
+            'person_name',
+            'amount',
+            'expense_type',
+            'description'
+        ]
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Description'
+            }),
+            'expense_type': forms.Select(
+                attrs={'class': 'form-control'}
+            ),
+  
+        }
